@@ -16,6 +16,17 @@ from ..models import Game, GameState, Player, PlayerStatistic, Team
 Game_GS = namedtuple('Game_GS', ('games', 'game_states'))
 
 
+
+
+def params_to_date(date_raw):
+    # Converts a string from parameters into a date object.
+    # Date parameter will be a string in the format of 'MMDDYYYY'
+    # Note - _ before function is python convention for a private function
+    # date_raw = '01012016'
+    date = datetime.strptime(date_raw, '%m%d%Y').date()
+    return date  
+
+
 class TeamViewSet(viewsets.ModelViewSet):
     # ViewSet to display Teams
 
@@ -37,21 +48,14 @@ class PlayerViewSet(viewsets.ModelViewSet):
         # overriding the perform_create
         serializer.save()
 
-    def _params_to_date(self, date_raw):
-        # Converts a string from parameters into a date object.
-        # Date parameter will be a string in the format of 'MMDDYYYY'
-        # Note - _ before function is python convention for a private function
-        # date_raw = '01012016'
-        date = datetime.strptime(date_raw, '%m%d%Y').date()
-        return date
-
     def get_queryset(self):
         # overriding get_queryset function
         # date_raw will be a string from the date query parameter
         date_raw = self.request.query_params.get('date')
         queryset = self.queryset
         if date_raw:
-            date = self._params_to_date(date_raw)
+            #date = self._params_to_date(date_raw)
+            date = params_to_date(date_raw)
             # Filtering the original queryset object on related_names -
             # home_games and away_games in the Game model. We match the dates
             # from those related_names with the date query parameter which is a
@@ -114,20 +118,11 @@ class GameStateViewSet(viewsets.ModelViewSet):
     serializer_class = GameStateSerializer
 
     def perform_create(self, serializer):
-        # overriding the perform_create
         serializer.save()
 
 
 class GameDetailViewSet(viewsets.ViewSet):
     # ViewSet for displaying game and gamestate as a list
-
-    def _params_to_date(self, date_raw):
-        # Converts a string from parameters into a date object.
-        # Date parameter will be a string in the format of 'MMDDYYYY'
-        # Note - _ before function is python convention for a private function
-        # date_raw = '01012016'
-        date = datetime.strptime(date_raw, '%m%d%Y').date()
-        return date   
 
     def list(self, request):
         date_raw = self.request.query_params.get('date')
@@ -139,7 +134,7 @@ class GameDetailViewSet(viewsets.ViewSet):
         # values from game_ids. At the end we return a named tuple of Game_GS
         # that looks in the form of something like {games: [], game_states:[]}
         if date_raw:
-            date = self._params_to_date(date_raw)
+            date = params_to_date(date_raw)
             game_date_filtered = Game.objects.all().filter(date=date)
             game_ids = game_date_filtered.values_list('id', flat=True)
             gs_filtered = GameState.objects.all().filter(game_id__in=game_ids)
