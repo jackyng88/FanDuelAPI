@@ -1,14 +1,10 @@
 from django.db.models import Q
-from django.db.models import Prefetch
 
 from rest_framework import generics, status, viewsets
-from rest_framework.exceptions import ValidationError
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
 from datetime import datetime
-import itertools
 from collections import namedtuple
 
 from .serializers import (GameSerializer, GameStateSerializer, 
@@ -77,7 +73,6 @@ class GameViewSet(viewsets.ModelViewSet):
     serializer_class = GameSerializer
 
     def perform_create(self, serializer):
-        # overriding the perform_create
         serializer.save()
 
 
@@ -160,46 +155,17 @@ class GameDetailViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 
 
-class GameSpecificDetailViewSet(generics.ListAPIView):
+class GameSpecificDetailViewSet(viewsets.ViewSet):
+    # ViewSet for displaying specific Game and GameState by url game_id param
 
-    #queryset = Game.objects.all()
-    #serializer_class = GameSerializer
-    lookup_url_kwarg = "game_id"
-    #filter_fields = ('id', )
-    serializer_class = GameDetailSerializer
-    
-    '''
-    def get_queryset(self):
-        #game_id = self.get_game_id()
-        #return Game.objects.filter(id=game_id)
-        #return Game.objects.filter(pk=self.kwargs['game_id'])
-        print(self.kwargs['game_id'])
-        return Game.objects.get(id=self.kwargs['game_id'])
-    '''
-    def _filter_game(self):
-        game_filtered = Game.objects.get(id=self.kwargs['game_id'])
-        return game_filtered
-    
-    def _filter_game_state(self):
-        game_state_filtered = GameState.objects.get(game_id=self.kwargs['game_id'])
-        return game_state_filtered
-    
-    '''
-    def list(self, request):
-        game_filtered = self._filter_game()
-        game_state_filtered = self._filter_game_state()
-
-        game_gs = Game_GS(
-            games=game_filtered,
-            game_states=game_state_filtered,
-        )
+    def list(self, request, game_id):
+        # Filters Game by the game_id as well as GameState. Returns a response
+        # in the form of {games:[ {...} ], game_states:[ {...} ] }
+        game_id = self.kwargs['game_id']
+        games_filtered = Game.objects.all().filter(id=game_id)
+        gs_filtered = GameState.objects.all().filter(game_id__in=game_id)
+        game_gs = Game_GS(games=games_filtered,
+                          game_states=gs_filtered)
         serializer = GameDetailSerializer(game_gs)
+
         return Response(serializer.data)
-    '''
-
-    #def get_object(self):
-     #   return Game.objects.get(id=self.kwargs['game_id'])
-
-    def get_queryset(self):
-        game_id = self.kwargs.get(self.lookup_url_kwarg)
-        return Game.objects.filter(id=game_id)

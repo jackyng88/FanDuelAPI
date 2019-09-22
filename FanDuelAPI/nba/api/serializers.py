@@ -12,7 +12,6 @@ class TeamSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-
 class PlayerStatisticSerializer(serializers.ModelSerializer):
     # Serializer for player statistics object
 
@@ -24,8 +23,6 @@ class PlayerStatisticSerializer(serializers.ModelSerializer):
 class GameStateSerializer(serializers.ModelSerializer):
     # Serializer for game state objects
 
-    #time_left_in_quarter = serializers.TimeField(format='%H:%M', input_formats='%H:%M')
-
     class Meta:
         model = GameState
         fields = '__all__'
@@ -33,7 +30,6 @@ class GameStateSerializer(serializers.ModelSerializer):
 
 class GameSerializer(serializers.ModelSerializer):
     # Serializer for Game objects
-    #game_gs = GameStateSerializer(many=True, read_only=True)
 
     class Meta:
         model = Game
@@ -50,6 +46,7 @@ class PlayerSerializer(serializers.ModelSerializer):
 
 
 class GameDetailSerializer(serializers.Serializer):
+    # Serializer for the listing of Game and GameState objects into a list
     games = GameSerializer(many=True)
     game_states = GameStateSerializer(many=True)
 
