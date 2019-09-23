@@ -65,14 +65,6 @@ class Player():
     def __repr__(self):
         return str(self.player_id)
 
-# Depth chart is a dictionray that will eventually become a dictionary of 
-# positions of which will be a list of player objects. For example, 
-# depth_chart = {'WR': [PlayerObject1, PlayerObject2], 'QB': [PlayerObject3]}
-depth_chart = {}
-new_player = Player(1, 'Mike', 'WR')
-new_player_2 = Player (2, 'John', 'WR')
-new_player_3 = Player (3, 'Sean', 'QB')
-new_player_4 = Player (4, 'Andy', 'WR')
 
 def	addPlayerToDepthChart(player, position, position_depth=None):
     # Function to add player to depth chart.
@@ -132,6 +124,14 @@ for player_list in depth_chart.values():
         print(str(player.player_id) + ' ' + player.name)
 '''
 
+# Depth chart is a dictionray that will eventually become a dictionary of 
+# positions of which will be a list of player objects. For example, 
+# depth_chart = {'WR': [PlayerObject1, PlayerObject2], 'QB': [PlayerObject3]}
+depth_chart = {}
+new_player = Player(1, 'Mike', 'WR')
+new_player_2 = Player (2, 'John', 'WR')
+new_player_3 = Player (3, 'Sean', 'QB')
+new_player_4 = Player (4, 'Andy', 'WR')
 
 addPlayerToDepthChart(new_player, 'WR', 1)
 addPlayerToDepthChart(new_player_2, 'WR', 1)

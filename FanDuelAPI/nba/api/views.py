@@ -61,7 +61,8 @@ class PlayerViewSet(viewsets.ModelViewSet):
             # from those related_names with the date query parameter which is a
             # datetime.date() object and then we filter the queryset again 
             # with player_id's that exist in the PlayerStatistic table.
-            qs_date_filtered = queryset.filter(Q(team__home_games__date=date) | Q(team__away_games__date=date))
+            qs_date_filtered = queryset.filter(Q(team__home_games__date=date) | 
+                                               Q(team__away_games__date=date))
             player_ids = PlayerStatistic.objects.values_list('player_id', flat=True)
             qs_date_playerstat = qs_date_filtered.filter(id__in=player_ids)
             return qs_date_playerstat
