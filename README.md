@@ -2,7 +2,7 @@
 
 ## Installation 
 
-### 1. All of the sections here use Python (Python 3.7.x specifically)
+### 1. All of the sections here use Python (Python 3.7.x specifically) and Django/Django REST Framework
 
 ### 2. (Recommended) Installing/using a Python Virtual Environment - 
        A. Clone from github
