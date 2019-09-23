@@ -1,13 +1,58 @@
 '''
-    {
-        player_id: 1,
-        name: "Bob",
-        position: “WR”
+Note - 
+
+To satisfy the below functions for additional sports like for MLB and NFL we can
+change accordingly. At the moment the depth_chart dictionary is 
+separated into keys by position and the value at that key is an array/list of
+Player objects like so - depth_chart = {'WR': [PlayerObj1, PlayerObj2]}.
+
+But what we can do to separate by sport is to now have the depth_chart be a 
+dictionary nested in dictionaries. So now we can have the keys as sport, and 
+inside that sport key we have the positions as normal. For example - 
+
+depth_chart = {
+    'NFL': {
+        'WR': [PlayerObject1, PlayerObject2],
+        'RB'; [PlayerObject3],
+        'QB': [PlayerObject4]
+    },
+
+    'MLB': {
+        'SP': [PlayerObject6],
+        'RP': [PlayerObject5],
+        'C': [PlayerObject7, PlayerObject8]
     }
+}
+
+Of course we'd have to tweak the four functions above just a tiny bit to
+accomodate for this change. For instance we would first retrieve the key of the
+specific sport that player is in first and then proceed as normal.
+
+OR we can forgo the separating of the depth_chart into Sports keys and just 
+have two separate depth_charts for each sport. For example - 
+
+nfl_depth_chart = {
+    'QB': [], 
+    'WR': [], 
+    'RB': [], 
+    'TE': []
+}
+
+mlb_depth_chart = {
+    'SP': [], 
+    'RP': [], 
+    'C': [], 
+    '1B': [], 
+    '2B': []
+}
+
+From here we can adjust by passing in the appropriate depth_chart into the 
+function calls for their specific sport.
 
 '''
 
 class Player():
+    # Class for the Player Object
 
     def __init__(self, id, name, position):
         self.player_id = id
@@ -40,6 +85,7 @@ def	addPlayerToDepthChart(player, position, position_depth=None):
         if position_depth is None:
             depth_chart[position].append(player)
         else:
+            # If a position_depth parameter was actually passed into call
             depth_chart[position].insert(position_depth, player)
 
 def	removePlayerFromDepthChart(player, position):
@@ -80,19 +126,17 @@ def	getPlayersUnderPlayerInDepthChart(player, position):
     players_under = depth_chart.get(position)[player_idx + 1:end_idx]
     return players_under
 
-
-
+'''
+for player_list in depth_chart.values():
+    for player in player_list:
+        print(str(player.player_id) + ' ' + player.name)
+'''
 addPlayerToDepthChart(new_player, 'WR', 1)
 addPlayerToDepthChart(new_player_2, 'WR', 1)
 addPlayerToDepthChart(new_player_3, 'QB')
 removePlayerFromDepthChart(new_player_3, 'WR')
 addPlayerToDepthChart(new_player_4, 'WR')
 print(getFullDepthChart())
-print (getPlayersUnderPlayerInDepthChart(new_player, 'WR'))
-#print(depth_chart.items())
+print(getPlayersUnderPlayerInDepthChart(new_player, 'WR'))
 
-
-for player_list in depth_chart.values():
-    for player in player_list:
-        print(str(player.player_id) + ' ' + player.name)
 
