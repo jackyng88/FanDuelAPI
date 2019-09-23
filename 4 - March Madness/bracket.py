@@ -18,13 +18,13 @@ class Team:
         return self.name
 
 
+# Following lines are optional as the files have been provided.
 # read raw csv file for teams and only pull the first two columns (id, team_name)
 bracket_df = pd.read_csv('bracket-00.csv')
 bracket_df = bracket_df[['team_id', 'team_name']]
 # Grab only the first 64 rows - we need number of teams to be a power of 2.
 bracket_df = bracket_df.loc[:63]
 bracket_df.to_csv('teams.csv', header=False, index=False)
-teams = []
 
 
 def create_teams(file):
@@ -117,6 +117,7 @@ def champions_path_to_victory(winners):
 
     
 # Initial lists that we need.
+teams = []
 bracket = []
 winners = []
 teams = create_teams('teams.csv')

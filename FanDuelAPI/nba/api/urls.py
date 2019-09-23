@@ -12,6 +12,7 @@ router.register(r'playerstats', nv.PlayerStatisticViewSet)
 router.register(r'gamestates', nv.GameStateViewSet)
 router.register(r'games', nv.GameDetailViewSet, 'games_gs')
 router.register(r'games/(?P<game_id>\d+)', nv.GameSpecificDetailViewSet, 'game_id_detail')
+router.register(r'players/(?P<player_id>\d+)/stats', nv.PlayerStatisticDetailViewSet, 'player_id_stat_detail')
 
 
 urlpatterns = [
@@ -25,10 +26,4 @@ urlpatterns = [
          nv.PlayerDetailViewSet.as_view(),
          name='player-detail'),
 
-    path('players/<int:player_id>/stats/', 
-         nv.PlayerStatisticDetailViewSet.as_view(),
-         name='player-stats-detail'),
-    
-     
 ]
-

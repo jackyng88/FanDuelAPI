@@ -102,13 +102,16 @@ class PlayerDetailViewSet(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PlayerSerializer
 
 
-class PlayerStatisticDetailViewSet(generics.RetrieveUpdateDestroyAPIView):
+class PlayerStatisticDetailViewSet(viewsets.ModelViewSet):
     # View for displaying the statistics of a given player.
     # will search by lookup_field in url with associated player_id integer.
     # In urls.py we specify this i.e. players/<int:player_id>/stats/
     queryset = PlayerStatistic.objects.all()
     serializer_class = PlayerStatisticSerializer
-    lookup_field = 'player_id'
+    #lookup_field = 'player_id'
+
+    def get_queryset(self):
+        return self.queryset.filter(player_id=self.kwargs['player_id'])
 
 
 class GameStateViewSet(viewsets.ModelViewSet):
@@ -158,7 +161,7 @@ class GameSpecificDetailViewSet(viewsets.ViewSet):
         # in the form of {games:[ {...} ], game_states:[ {...} ] }
         game_id = self.kwargs['game_id']
         games_filtered = Game.objects.all().filter(id=game_id)
-        gs_filtered = GameState.objects.all().filter(game_id__in=game_id)
+        gs_filtered = GameState.objects.all().filter(game_id=game_id)
         game_gs = Game_GS(games=games_filtered,
                           game_states=gs_filtered)
         serializer = GameDetailSerializer(game_gs)

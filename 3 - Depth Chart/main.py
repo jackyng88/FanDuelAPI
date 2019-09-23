@@ -131,6 +131,8 @@ for player_list in depth_chart.values():
     for player in player_list:
         print(str(player.player_id) + ' ' + player.name)
 '''
+
+
 addPlayerToDepthChart(new_player, 'WR', 1)
 addPlayerToDepthChart(new_player_2, 'WR', 1)
 addPlayerToDepthChart(new_player_3, 'QB')
